@@ -5,7 +5,7 @@ from src.chatbot.chatbot import Chatbot
 def print_banner():
     print("""
 ─────────────────────────────────────────────────────
-      Leoplus AI - Sentiment Chatbot (CLI)
+      LiaPlus AI - Sentiment Chatbot (CLI)
      Type 'quit' to end the conversation
 ─────────────────────────────────────────────────────
     """)
@@ -34,7 +34,7 @@ def main():
 
     while True:
         try:
-            user = input("You: ").strip()
+            user = input("User: ").strip()
             if not user:
                 continue
 
