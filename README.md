@@ -1,4 +1,4 @@
-# Leoplus AI – Conversational Sentiment Analysis Chatbot
+# LiaPlus AI – Conversational Sentiment Analysis Chatbot
 
 A production-ready chatbot built for the **LiaPlus AI internship assignment**. This project provides:
 
