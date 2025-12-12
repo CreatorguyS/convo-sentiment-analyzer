@@ -1,6 +1,11 @@
 # Leoplus AI – Conversational Sentiment Analysis Chatbot
 
-A production-ready chatbot built for the Leoplus AI internship assignment. This project implements **Tier 1 (mandatory)** and **Tier 2 (additional credit)** sentiment analysis, along with a lightweight **Rule-Based NLU system** for context-aware responses.
+A production-ready chatbot built for the **LiaPlus AI internship assignment**. This project provides:
+
+* **Tier 1** (mandatory): Conversation-level sentiment analysis.
+* **Tier 2** (bonus): Statement-level sentiment analysis.
+
+This updated version uses **VADER Sentiment Analyzer only**, ensuring lightweight, fast, and dependency‑safe execution.
 
 ---
 
@@ -8,53 +13,50 @@ A production-ready chatbot built for the Leoplus AI internship assignment. This 
 
 ### ✅ Tier 1 — Overall Conversation Sentiment (Mandatory)
 
-At the end of the conversation, the chatbot generates:
+At the end of the interaction, the system generates:
 
-* Overall sentiment → *positive / neutral / negative*
+* Overall conversation sentiment (positive / neutral / negative)
 * Confidence score
-* Conversation summary
-* Mood shift detection (bonus feature)
+* Optional mood trend (improving / worsening / stable)
 
-### ✅ Tier 2 — Message-Level Sentiment (Additional Credit)
+### ✅ Tier 2 — Per‑Message Sentiment (Bonus)
 
-For **each user message**, the bot performs:
+For every user message:
 
-* Sentiment detection
-* Confidence scoring
-* Sentiment-aware response tone
+* Sentiment is analyzed using **VADER**
+* Confidence is computed from compound score
+* Chatbot chooses a **tone‑appropriate** reply
 
 Example:
 
 ```
 User: "Your service disappoints me"
 → Sentiment: negative (confidence: 0.82)
-Bot: I'm sorry you're facing trouble. Let me help fix this.
+Bot: "I’m sorry you’re facing trouble. Let me help fix this."
 ```
 
 ---
 
-## 📌 Rule-Based NLU (Context Understanding)
+## 📌 Rule‑Based NLU (Context Awareness)
 
-A lightweight NLU engine identifies user intent based on keywords.
-
-Supported intents:
+A small NLU classifier detects intent using keyword patterns.
 
 | Intent          | Example Keywords             |
 | --------------- | ---------------------------- |
-| greeting        | hi, hello                    |
+| greeting        | hi, hello, hey               |
 | farewell        | bye, thanks                  |
 | refund          | refund, money back           |
 | delivery_issue  | late, package, not delivered |
 | technical_issue | error, crash, not working    |
-| billing_issue   | charge, bill, invoice        |
+| billing_issue   | bill, charge, invoice        |
 | account_issue   | login, password              |
 | general         | fallback                     |
 
-This enables **context-specific responses**, e.g.:
+This allows context‑specific replies:
 
 ```
-User: my package is late
-Bot: I'm sorry your package is delayed. Could you share your order ID?
+User: "my package is late"
+Bot: "I’m sorry your package is delayed. Could you share your order ID?"
 ```
 
 ---
@@ -91,26 +93,33 @@ main.py
 
 ### 1️⃣ Create virtual environment
 
-```bash
+```
 python -m venv venv
-source venv/bin/activate   # Windows → venv\Scripts\activate
+```
+
+Activate it:
+
+```
+# Windows
+venv\Scripts\activate
+
+# Linux / Mac
+source venv/bin/activate
 ```
 
 ### 2️⃣ Install dependencies
 
-```bash
+```
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Run the chatbot
+### 3️⃣ Run the chatbot (CLI)
 
-```bash
+```
 python main.py
 ```
 
-### 4️⃣ End the conversation
-
-Type:
+### 4️⃣ End the conversation with:
 
 ```
 quit
@@ -118,81 +127,74 @@ exit
 bye
 ```
 
-You will see a final sentiment summary.
-
 ---
 
 # 🧠 Sentiment Logic Explained
 
-## ✔ Tier 2: Single Message Sentiment
+## ✔ Tier 2 (Statement‑Level)
 
-Each message is cleaned and analyzed using:
+The system uses **VADER only**:
 
-1. **Transformers (DistilBERT)** → main model
-2. **VADER** → fallback
-3. **Keyword polarity** → final fallback
+* `compound` score determines sentiment label
+* Confidence = absolute value of compound
 
-Each prediction returns:
+| Compound Score Range | Meaning  |
+| -------------------- | -------- |
+| ≥ 0.05               | Positive |
+| ≤ -0.05              | Negative |
+| Between              | Neutral  |
 
-* label: positive / negative / neutral
-* confidence score
-* raw scores
+This ensures predictable, consistent behavior.
 
 ---
 
-## ✔ Tier 1: Conversation-Level Sentiment
+## ✔ Tier 1 (Conversation‑Level)
 
-All user messages → aggregated using weighted average:
+At the end:
 
-* Positive sentiment → +score
-* Negative → -score
-* Neutral → 0
+* All message compound scores are averaged
+* Higher confidence weights influence final sentiment
 
-Weights depend on message length + confidence.
+Also computes:
 
-Output includes:
-
-* Overall sentiment
-* Confidence
-* Trend (improving/worsening/stable)
+* **Trend:** improving / worsening / stable
 
 ---
 
 # 🟦 Technologies Used
 
-### **NLP**
+### **Core NLP**
 
-* Transformers (DistilBERT)
-* VADER sentiment analyzer
+* VADER (NLTK)
 * Rule-Based NLU
-* Text cleaning utilities
+* Text preprocessing utilities
 
-### **Software Architecture**
+### **Architecture**
 
-* Modular service-component design
+* Modular components
+* Service layer
+* Repository layer for saving conversations
 * Logging utilities
-* Repository layer
-* Conversation analytics
 
 ### **Testing**
 
-* pytest
-* Unit tests for text cleaning, sentiment, and conversation handling
+* `pytest` for unit tests on:
+
+  * Text cleaner
+  * Sentiment component
+  * Conversation manager
 
 ---
 
 # 🏆 Status of Tier 2 Implementation
 
-| Feature                       | Status            |
-| ----------------------------- | ----------------- |
-| Single-message sentiment      | ✅ Completed       |
-| Confidence scoring            | ✅ Completed       |
-| Per-message sentiment output  | ✅ Completed       |
-| Conversation flow integration | ✅ Completed       |
-| Sentiment-aware tone          | ✅ Completed       |
-| Mood shift detection          | ⭐ Bonus Completed |
-
-Your bot **meets and exceeds** Tier 2 expectations.
+| Feature               | Status                          |
+| --------------------- | ------------------------------- |
+| Per-message sentiment | ✅ Done                          |
+| Confidence scoring    | ✅ Done                          |
+| Sentiment-aware tone  | ✅ Done                          |
+| Mood trend analysis   | ⭐ Bonus Done                    |
+| Transformers model    | ❌ Removed (now uses VADER only) |
 
 ---
 
@@ -203,7 +205,7 @@ Bot: Hello! I'm Leoplus Assistant. How can I help?
 
 You: My package is not delivered yet.
 → Sentiment: negative (0.81)
-Bot: I'm sorry your package is delayed. Could you share your order ID?
+Bot: I’m sorry your package is delayed. Could you share your order ID?
 
 You: Also the billing was wrong.
 → Sentiment: negative (0.73)
@@ -218,18 +220,14 @@ Trend: worsening
 
 ---
 
-# 🎯 Why This Project Is Strong for the Internship
+# 🎯 Project characteristics
 
-* Professional architecture
-* Tier 1 & Tier 2 fully implemented
-* Clean and scalable codebase
-* Context-aware responses via Rule-Based NLU
-* Multiple fallback strategies for robustness
-* Clear documentation and readability
-* No unnecessary ML complexity
-
-This showcases strong engineering fundamentals and practical NLP understanding.
+* Clean, modular, production-style architecture
+* Tier 1 + Tier 2 fully satisfied
+* Rule-Based NLU improves realism
+* Stable sentiment system using VADER
+* Clear documentation
+* Lightweight (no heavy ML models needed)
 
 ---
 
-If you want additional sections (deployment, limitations, future work), I can add them too!
