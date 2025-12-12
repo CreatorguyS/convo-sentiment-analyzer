@@ -1,0 +1,4 @@
+aggregation:
+  max_neg_scope: 8
+  weight_by_length: true
+  length_weight_scale: 1.0

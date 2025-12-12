@@ -1,0 +1,10 @@
+sentiment:
+  model: distilbert-base-uncased-finetuned-sst-2-english
+  positive_threshold: 0.05
+  negative_threshold: -0.05
+  use_transformers: false   # set true if you installed transformers & torch
+storage:
+  conversations_path: data/conversations.jsonl
+app:
+  host: "127.0.0.1"
+  port: 8000

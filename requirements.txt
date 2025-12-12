@@ -1,0 +1,11 @@
+fastapi==0.104.1
+uvicorn==0.24.0
+vaderSentiment==3.3.2
+numpy>=1.26.0
+pytest==7.4.3
+python-dotenv==1.0.0
+requests==2.31.0
+pydantic==2.5.0
+# Optional heavy deps - install only if you want transformer backend
+transformers>=4.30.0
+torch>=2.0.1
